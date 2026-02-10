@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>燕云十六声 - 【燕云馒哉】专属工牌墙</title>
+    <!-- 引入字体和样式库 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        /* 全局样式 - 性能优化版 */
+        body {
+            background: url("./photo/z2.jpg") no-repeat center center fixed;
+            background-size: cover;
+            font-family: "Noto Serif SC", "宋体", serif;
+            color: #e8e6e3;
+            background-color: #12100e;
+            margin: 0;
+            padding: 0;
+            padding-top: 80px;
+            padding-bottom: 40px;
+            min-height: 100vh;
+            position: relative;
+            line-height: 1.6;
+	    user-select: none;
+	    -webkit-user-select: none;
+        }
+
+        /* 顶部导航栏 */
+        .tab-nav-bar {
+            background-color: rgba(18, 16, 14, 0.85) !important;
+            border-bottom: 1px solid #4a4338;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 9999;
+            padding: 18px 0;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.7);
+        }
+        .tab-nav-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .tab-btn {
+            background-color: transparent;
+            border: none;
+            color: #e8e6e3;
+            font-size: 1.15rem;
+            font-weight: 400;
+            padding: 8px 30px;
+            cursor: pointer;
+	    will-change: color, transform;
+            transition: translateZ(0);
+            border-radius: 0;
+            margin: 0 8px;
+            position: relative;
+        }
+        .tab-btn::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 1px;
+            background-color: #c8aa78;
+            transition: all 0.4s ease;
+            transform: translateX(-50%);
+        }
+        .tab-btn.active {
+            color: #c8aa78;
+            font-weight: 600;
+        }
+        .tab-btn.active::after {
+            width: 80%;
+        }
+        .tab-btn:hover {
+            color: #c8aa78;
+        }
+        .tab-btn:hover::after {
+            width: 80%;
+        }
+        @media (max-width: 768px) {
+            .tab-btn {
+                font-size: 1rem;
+                padding: 8px 20px;
+            }
+        }
+
+        /* 主页首屏 */
+        .hero-section {
+            height: calc(100vh - 160px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            padding: 0 20px;
+        }
+        .hero-title {
+            font-family: "Ma Shan Zheng", cursive;
+            font-size: 8rem;
+            color: #c8aa78;
+            text-shadow: 0 0 15px rgba(200, 170, 120, 0.6), 2px 2px 4px #000;
+            transition: all 0.6s ease;
+            cursor: default;
+            line-height: 1.1;
+            margin-bottom: 0;
+        }
+        .hero-subtitle {
+            font-family: "Noto Serif SC", serif;
+            font-size: 1.8rem;
+            color: #e8e6e3;
+            margin-top: 25px;
+            text-shadow: 1px 1px 3px #000;
+            font-weight: 400;
+            letter-spacing: 2px;
+        }
+        /* 进入百业按钮 */
+        .enter-btn {
+            background-color: rgba(200, 170, 120, 0.15);
+            border: 1px solid #c8aa78;
+            color: #c8aa78;
+            font-family: "Noto Serif SC", serif;
+            font-size: 1.3rem;
+            padding: 12px 40px;
+            margin-top: 40px;
+            border-radius: 0;
+            transition: all 0.4s ease;
+        }
+        .enter-btn:hover {
+            background-color: rgba(200, 170, 120, 0.3);
+            border-color: #e0c890;
+            color: #e0c890;
+            transform: translateY(-2px);
+        }
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 5rem;
+            }
+            .hero-subtitle {
+                font-size: 1.4rem;
+                letter-spacing: 1px;
+            }
+            .enter-btn {
+                font-size: 1.1rem;
+                padding: 10px 30px;
+            }
+        }
+
+        /* 加载动画容器 - 性能优化 */
+        .loading-section {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: calc(100vh - 100px);
+            padding: 20px;
+            text-align: center;
+            padding-bottom: 20px;
+	    margin-bottom: 20px;
+        }
+        /* 馒头旋转动画 - 顺时针30°→回正→逆时针30°→回正 */
+        .loading-icon {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 40px;
+        }
+        .mantou-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            animation: rotate30 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 15px rgba(200, 170, 120, 0.6));
+        }
+        /* 停止旋转 */
+        .loading-icon.stop .mantou-img {
+            animation: none;
+            transform: rotate(0deg);
+        }
+        /* 核心旋转动画定义 */
+        @keyframes rotate30 {
+            0% { transform: rotate(0deg); }      /* 初始状态 */
+            25% { transform: rotate(30deg); }   /* 顺时针30度 */
+            50% { transform: rotate(0deg); }    /* 回正 */
+            75% { transform: rotate(-30deg); }  /* 逆时针30度 */
+            100% { transform: rotate(0deg); }   /* 回正 */
+        }
+
+        /* 滚动工牌容器 - 性能优化 */
+        .card-scroll-container {
+            width: 100%;
+            max-width: 1200px;
+            overflow: hidden;
+            position: relative;
+            height: 120px;
+            margin-top: 10px !important;
+        }
+        .card-scroll-wrapper {
+            display: flex;
+            animation: scroll 20s linear infinite;
+            gap: 20px;
+            will-change: transform;
+        }
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        /* 简化mini-card样式 */
+        .mini-card {
+            width: 100px;
+            height: 100px;
+            border-radius: 4px;
+            border: 1px solid #4a4338;
+            overflow: hidden;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 10;
+            transform-origin: center center;
+        }
+        .mini-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to right,
+                rgba(255,255,255,0.1) 0%,
+                rgba(255,255,255,0) 50%,
+                rgba(255,255,255,0.05) 100%
+            );
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .mini-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .mini-card:hover {
+            transform: scale(1.1);
+            border-color: #c8aa78;
+            box-shadow: 0 10px 30px rgba(200, 170, 120, 0.4);
+        }
+
+        /* 各栏目通用卡片 */
+        .content-card {
+            background-color: rgba(28, 25, 22, 0.75);
+            border: 1px solid #4a4338;
+            border-radius: 4px;
+            padding: 45px 40px;
+            margin: 40px auto;
+            max-width: 1100px;
+            backdrop-filter: blur(6px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        h2 {
+            color: #c8aa78;
+            text-align: center;
+            margin-bottom: 35px;
+            font-family: "Noto Serif SC", serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 80px;
+            height: 1px;
+            background-color: #c8aa78;
+            transform: translateX(-50%);
+        }
+        h5 {
+            color: #d9d0c1;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        /* 工牌墙 - 简化动画 */
+        .card {
+            background-color: rgba(28, 25, 22, 0.8);
+            border: 1px solid #4a4338;
+            border-radius: 8px;
+	    will-change: transform, box-shadow;
+            transition: translateZ(0);
+	    transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.4s cubic-bezier(0.25, 0.1, 0.25, 1); /* 换更顺滑的缓动曲线，缩短时长从0.6s→0.4s */
+}
+            margin-bottom: 30px;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .card-img-top {
+            border-bottom: 1px solid #4a4338;
+            height: 340px;
+            object-fit: cover;
+            width: 100%;
+            transition: all 0.6s ease;
+        }
+        .card-body {
+            padding: 20px 0 !important;
+            text-align: center;
+            background-color: rgba(18, 16, 14, 0.5);
+        }
+        .card-title {
+            color: #c8aa78 !important;
+            font-family: "Noto Serif SC", serif;
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin: 0;
+            letter-spacing: 1px;
+        }
+        .card:hover {
+            transform: scale(1.05);
+            border-color: #c8aa78;
+            box-shadow: 0 15px 40px rgba(200, 170, 120, 0.3);
+        }
+        .card:hover::before {
+            opacity: 1;
+        }
+        .card:hover .card-img-top {
+            filter: brightness(1.15) contrast(1.05);
+        }
+
+        /* 文本样式 */
+        p, li {
+            font-size: 1.05rem;
+            color: #d9d0c1;
+            margin-bottom: 15px;
+        }
+        .lead {
+            font-size: 1.2rem;
+            color: #e8e6e3;
+            font-weight: 400;
+            letter-spacing: 1px;
+            margin-bottom: 25px;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        ul li {
+            list-style: none;
+            position: relative;
+            padding-left: 20px;
+        }
+        ul li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #c8aa78;
+            font-size: 1.2rem;
+        }
+
+        /* 联系方式链接 */
+        a.contact-link {
+            color: #c8aa78;
+            text-decoration: none;
+            position: relative;
+            padding-bottom: 2px;
+        }
+        a.contact-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background-color: #c8aa78;
+            transition: width 0.3s ease;
+        }
+        a.contact-link:hover {
+            color: #e0c890;
+        }
+        a.contact-link:hover::after {
+            width: 100%;
+        }
+
+        /* 标签切换动画 - 简化 */
+        .tab-content {
+            display: none;
+            opacity: 0;
+	    will-change: opacity, transform;
+            transform: translateZ(0);
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out; /* 缩短时长从0.4s→0.3s */
+        }
+        .tab-content.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 底部版权 */
+        footer {
+            background-color: rgba(18, 16, 14, 0.9);
+            border-top: 1px solid #4a4338;
+            padding: 20px 0;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 9998;
+            font-size: 0.95rem;
+            color: #8a8275;
+        }
+
+        /* 工牌样式 */
+        .badge-item {
+            width: 120px;
+            height: 160px;
+            margin: 10px;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s;
+            border: 2px solid #ddd;
+        }
+        .badge-item:hover {
+            transform: scale(1.05);
+            border-color: #0d6efd;
+        }
+        .badge-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* 3D卡片核心样式 - 优化光泽质感，移除蓝色调 */
+        .card-wrapper {
+            position: relative;
+            width: 420px;
+            height: 520px;
+            margin: 0 auto;
+            transform-style: preserve-3d;
+            cursor: pointer;
+	    will-change: transform;
+            transform-origin: center center;
+            transition: translateZ(0);
+	    transition: transform 0.2s ease-out; /* 缩短交互响应时长从0.08s→0.05s */
+            perspective: 1200px;
+            backface-visibility: hidden;
+            will-change: transform;
+        }
+        .card-wrapper .card {
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            transform-style: preserve-3d;
+            box-shadow: none !important;
+            border: 0;
+            background: transparent;
+            margin-bottom: 0 !important;
+        }
+        .card-bg {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transform: translateZ(5px);
+            filter: grayscale(0.1) contrast(1.15) brightness(1.1); /* 降低灰度，提升亮度 */
+        }
+        /* 优化光泽：改为金棕色调质感反光，移除蓝色 */
+        .card-reflection {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform: translateZ(10px);
+            pointer-events: none;
+            background: 
+                linear-gradient(
+                    45deg,
+                    rgba(200, 170, 120, 0.45) 10%,
+                    rgba(180, 150, 100, 0.35) 30%,
+                    rgba(160, 130, 80, 0.3) 50%,
+                    rgba(140, 110, 60, 0.25) 70%,
+                    rgba(120, 90, 40, 0.2) 90%
+                ),
+		radial-gradient(
+			circle at 20% 20%,
+			rgba(255, 255, 255, 0.2) 0%,
+			transparent 40%
+		),
+                linear-gradient(
+                    145deg,
+                    rgba(255, 255, 255, 0.25) 0%,
+                    transparent 60%
+                );
+            mix-blend-mode: overlay; /* 更自然的混合模式 */
+            animation: reflectionFlow 15s ease-in-out infinite alternate;
+            background-size: 200% 200%;
+        }
+        @keyframes reflectionFlow {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+        .card-wrapper .card::after {
+            content: "";
+            position: absolute;
+            width: 96%;
+            height: 96%;
+            left: 2%;
+            top: 2%;
+            border-radius: 18px;
+            background: rgba(0, 0, 0, 0.2);
+            transform: translateZ(-5px);
+            filter: blur(12px);
+            z-index: -1;
+        }
+        .card-wrapper:hover {
+            transform: scale(1.005);
+        }
+        .card-wrapper:hover .card-reflection {
+            background: 
+                linear-gradient(
+                    45deg,
+                    rgba(200, 170, 120, 0.5) 10%,
+                    rgba(180, 150, 100, 0.45) 30%,
+                    rgba(160, 130, 80, 0.4) 50%,
+                    rgba(140, 110, 60, 0.35) 70%,
+                    rgba(120, 90, 40, 0.3) 90%
+                ),
+                linear-gradient(
+                    145deg,
+                    rgba(255, 255, 255, 0.3) 0%,
+                    transparent 60%
+                );
+        }
+
+        /* 弹窗样式优化 - 彻底移除黑色关闭框 */
+        #cardModal .modal-content {
+            background-color: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            border-radius: 20px;
+        }
+        #cardModal .modal-body {
+            padding: 0 !important;
+            background: transparent !important;
+        }
+        #cardModal .modal-footer {
+            display: none !important; /* 彻底隐藏关闭按钮区域 */
+        }
+        #cardModal .modal-dialog {
+            max-width: 450px !important; /* 适配3D卡片尺寸 */
+            margin: 1.75rem auto !important;
+        }
+
+        /* 照片滚动墙样式 */
+        .photo-scroll-wall {
+            width:  100vw;
+            height: 90vh;
+            position: fixed;
+            overflow: hidden;
+            border-radius: 0;
+            background-color: none;
+            border: none;
+        }
+        .photo-scroll-wrapper {
+            display: flex;
+            width: max-content;
+            height: 100%;
+            align-items: center;
+            animation: photoScroll 80s ease-in-out infinite;
+        }
+        .photo-scroll-wall:hover .photo-scroll-wrapper {
+            animation-play-state: paused;
+        }
+	.scroll-control {
+		display: none !important;
+	}
+        .photo-item {
+            width: 80vw;
+            height: 90vh;
+            margin: 0 10px;
+            border-radius: 0;
+            overflow: hidden;
+            border: none;
+            transition: all 0.4s ease;
+            flex-shrink: 0;
+            box-shadow: none;
+        }
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: all 0.4s ease;
+        }
+        .photo-item:hover {
+            transform: scale(1.08);
+	    transform: scale(1.08) rotate(1deg);
+            box-shadow: 0 15px 30px rgba(200, 170, 120, 0.4);
+        }
+        .photo-item:hover img {
+            filter: brightness(1.1) contrast(1.05);
+        }
+        @keyframes photoScroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+        /* 滚动控制按钮 */
+        .scroll-control {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: rgba(200, 170, 120, 0.3);
+            border: 1px solid #c8aa78;
+            color: #e8e6e3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+        .scroll-control:hover {
+            background-color: rgba(200, 170, 120, 0.5);
+            transform: translateY(-50%) scale(1.1);
+        }
+        .scroll-prev {
+            left: 20px;
+        }
+        .scroll-next {
+            right: 20px;
+        }
+        /* 响应式适配 */
+        @media (max-width: 992px) {
+            .content-card {
+                padding: 35px 25px;
+                margin: 30px 15px;
+            }
+            .card-img-top {
+                height: 280px;
+            }
+            h2 {
+                font-size: 2rem;
+            }
+            .card-title {
+                font-size: 1.4rem;
+            }
+            .loading-icon {
+                font-size: 4rem;
+            }
+            .mini-card {
+                width: 80px;
+                height: 80px;
+            }
+            .photo-scroll-wall {
+                height: 400px;
+            }
+            .photo-item {
+                width: 250px;
+                height: 350px;
+            }
+            .card-wrapper {
+                width: 350px;
+                height: 450px;
+            }
+        }
+        @media (max-width: 768px) {
+            .photo-scroll-wall {
+                height: 350px;
+            }
+            .photo-item {
+                width: 200px;
+                height: 300px;
+            }
+            .scroll-control {
+                width: 40px;
+                height: 40px;
+            }
+            .card-wrapper {
+                width: 300px;
+                height: 400px;
+            }
+        }
+        @media (max-width: 576px) {
+            .card-img-top {
+                height: 220px;
+            }
+            .loading-icon {
+                font-size: 3rem;
+            }
+            .mini-card {
+                width: 60px;
+                height: 60px;
+            }
+            .card:hover {
+                transform: scale(1.02);
+            }
+            .mini-card:hover {
+                transform: scale(1.08);
+            }
+            .photo-scroll-wall {
+                height: 300px;
+            }
+            .photo-item {
+                width: 180px;
+                height: 260px;
+                margin: 0 10px;
+            }
+            .card-wrapper {
+                width: 280px;
+                height: 380px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="tab-nav-bar">
+        <div class="tab-nav-container">
+            <button class="tab-btn active" onclick="switchTab('home')">
+                <i class="bi bi-house-fill me-2"></i>主页
+            </button>
+            <button class="tab-btn" onclick="switchTab('intro')">
+                <i class="bi bi-book-fill me-2"></i>百业简介
+            </button>
+            <button class="tab-btn" onclick="switchTab('cards')">
+                <i class="bi bi-id-card-fill me-2"></i>工牌墙
+            </button>
+            <button class="tab-btn" onclick="switchTab('recruit')">
+                <i class="bi bi-people-fill me-2"></i>加入我们
+            </button>
+        </div>
+    </div>
+
+    <!-- 1. 主页栏目 -->
+    <div id="home" class="tab-content active">
+        <section class="hero-section" id="hero-main">
+            <div>
+                <h1 class="hero-title">燕云馒哉</h1>
+                <p class="hero-subtitle">一馒在手，凝烟火之温，承三餐之暖</p>
+                <button class="enter-btn" onclick="generateReference()">
+                    <i class="bi bi-arrow-right-circle-fill me-2"></i>进入百业
+                </button>
+            </div>
+        </section>
+        <!-- 加载动画+滚动工牌区域 -->
+        <section class="loading-section" id="loading-area">
+            <div class="loading-icon">
+                <img src="./photo/m1.png" alt="旋转馒头" class="mantou-img">
+            </div>
+            <!-- 滚动工牌容器 -->
+            <div class="card-scroll-container mt-4">
+                <div class="card-scroll-wrapper">
+                    <div class="mini-card"><img src="./photo/g1.png" alt="工牌1"></div>
+                    <div class="mini-card"><img src="./photo/g2.png" alt="工牌2"></div>
+                    <div class="mini-card"><img src="./photo/g3.png" alt="工牌3"></div>
+                    <div class="mini-card"><img src="./photo/g4.png" alt="工牌4"></div>
+                    <div class="mini-card"><img src="https://picsum.photos/id/1080/800/600" alt="工牌5"></div>
+                    <div class="mini-card"><img src="https://picsum.photos/id/1081/800/600" alt="工牌6"></div>
+                    <div class="mini-card"><img src="https://picsum.photos/id/1076/800/600" alt="工牌1"></div>
+                    <div class="mini-card"><img src="https://picsum.photos/id/1077/800/600" alt="工牌2"></div>
+                    <div class="mini-card"><img src="https://picsum.photos/id/1078/800/600" alt="工牌3"></div>
+                    <div class="mini-card"><img src="https://picsum.photos/id/1079/800/600" alt="工牌4"></div>
+                    <div class="mini-card"><img src="https://picsum.photos/id/1080/800/600" alt="工牌5"></div>
+                    <div class="mini-card"><img src="https://picsum.photos/id/1081/800/600" alt="工牌6"></div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 2. 百业简介（改为照片滚动播放墙） -->
+    <div id="intro" class="tab-content">
+                <!-- 照片滚动播放墙 -->
+                <div class="photo-scroll-wall" id="photoScrollWall">
+                    <!-- 滚动控制按钮 -->
+                    <div class="scroll-control scroll-prev" onclick="scrollPhotos('prev')">
+                        <i class="bi bi-chevron-left"></i>
+                    </div>
+                    <div class="scroll-control scroll-next" onclick="scrollPhotos('next')">
+                        <i class="bi bi-chevron-right"></i>
+                    </div>
+                    <!-- 照片滚动容器 -->
+                    <div class="photo-scroll-wrapper" id="photoScrollWrapper">
+                        <!-- 照片列表 - 重复一份实现无缝滚动 -->
+                        <div class="photo-item"><img src="./photo/b1.png" alt="百业风采1"></div>
+                        <div class="photo-item"><img src="./photo/b2.png" alt="百业风采2"></div>
+                        <div class="photo-item"><img src="./photo/b3.jpg" alt="百业风采3"></div>
+                        <div class="photo-item"><img src="./photo/b4.jpg" alt="百业风采4"></div>
+                        <div class="photo-item"><img src="./photo/b5.jpg" alt="百业风采5"></div>
+                        <div class="photo-item"><img src="./photo/b6.png" alt="百业风采6"></div>
+                        <div class="photo-item"><img src="./photo/b7.jpg" alt="百业风采7"></div>
+                        <div class="photo-item"><img src="./photo/b8.png" alt="百业风采8"></div>
+                        <div class="photo-item"><img src="./photo/b9.jpg" alt="百业风采9"></div>
+                        <div class="photo-item"><img src="./photo/b10.png" alt="百业风采10"></div>
+                        <!-- 重复一份实现无缝滚动 -->
+                        <div class="photo-item"><img src="./photo/b1.png" alt="百业风采1"></div>
+                        <div class="photo-item"><img src="./photo/b2.png" alt="百业风采2"></div>
+                        <div class="photo-item"><img src="./photo/b3.jpg" alt="百业风采3"></div>
+                        <div class="photo-item"><img src="./photo/b4.jpg" alt="百业风采4"></div>
+                        <div class="photo-item"><img src="./photo/b5.jpg" alt="百业风采5"></div>
+                        <div class="photo-item"><img src="./photo/b6.png" alt="百业风采6"></div>
+                        <div class="photo-item"><img src="./photo/b7.jpg" alt="百业风采7"></div>
+                        <div class="photo-item"><img src="./photo/b8.png" alt="百业风采8"></div>
+                        <div class="photo-item"><img src="./photo/b9.jpg" alt="百业风采9"></div>
+                        <div class="photo-item"><img src="./photo/b10.png" alt="百业风采10"></div>
+                    </div>
+                </div>
+    </div>
+
+    <!-- 3. 工牌墙栏目 -->
+    <div id="cards" class="tab-content">
+        <div class="container">
+            <section class="content-card">
+                <h2>百业工牌墙</h2>
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-5">
+                    <!-- 工牌1 - 主理人 -->
+                   <div class="col">
+   			 <div class="card h-100" 
+      			          data-nickname="雨怎么停了" 
+        			  data-position="主理人" 
+      			          data-id="yysls001" 
+                                  data-skill="卖馍、摸鱼、带萌新" 
+      			          data-img="./photo/g13d.png">         
+				  <img src="./photo/g1.png" class="card-img-top" alt="主理人工牌">
+        			  <div class="card-body text-center">
+           				   <h5 class="card-title">雨怎么停了</h5>
+      				    </div>
+    			     </div>
+		      </div>
+                    <!-- 工牌2 - 示例 -->
+                    <div class="col">
+                        <div class="card h-100" data-nickname="贺呵呵" data-position="副本打手" data-id="HY002" data-skill="PVE输出、副本速通" data-img="./photo/g33d.jpg">
+                            <img src="./photo/g3.png" class="card-img-top" alt="成员2工牌">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">贺呵呵</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 工牌3 - 示例 -->
+                    <div class="col">
+                        <div class="card h-100" data-nickname="负笠" data-position="休闲玩家" data-id="HY003" data-skill="江湖探索、风景打卡" data-img="./photo/g23d.png">
+                            <img src="./photo/g2.png" class="card-img-top" alt="成员3工牌">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">负笠</h5>
+                            </div>
+                        </div>
+                    </div>
+		    <!-- 工牌4 - 示例 -->
+		    <div class="col">
+			<div class="card h-100" data-nickname="姜时灼" data-position="休闲玩家" data-id="HY003" data-skill="江湖探索、风景打卡" data-img="./photo/g43d.jpg">
+                            <img src="./photo/g4.png" class="card-img-top" alt="成员4工牌">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">姜时灼</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- 4. 加入我们栏目 -->
+    <div id="recruit" class="tab-content">
+        <div class="container">
+            <section class="content-card">
+                <h2>加入我们</h2>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <h5>招募要求</h5>
+                        <ul>
+                            <li>美味程度≥50级（萌新可带练）</li>
+                            <li>每日在线≥2秒</li>
+                            <li>团结友爱，没有任何压力</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>联系方式</h5>
+                        <ul>
+                            <li>游戏内：<a href="javascript:alert('游戏内联系：神仙渡美味大馒头主理人')" class="contact-link">神仙渡美味大馒头主理人</a></li>
+                            <li>招新接待：<a href="javascript:alert('接待员：神仙渡美味大馒头主理人')" class="contact-link">神仙渡美味大馒头主理人</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- 3d图片弹窗（彻底移除黑色框和关闭按钮） -->
+    <div class="modal fade" id="cardModal" tabindex="-1" aria-labelledby="cardModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body" id="cardModalBody" style="padding: 0 !important;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部版权 -->
+    <footer>
+        <div class="container">
+            <p>© 2025 燕云馒哉 - 一馒在手，凝烟火之温，承三餐之暖 | 燕云十六声同人创作</p>
+        </div>
+    </footer>
+
+    <!-- 引入JS库 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let cardModalInstance = null;
+        let scrollAnimationId = null;
+        let scrollPosition = 0;
+
+        // DOM加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化弹窗实例
+            const modalElement = document.getElementById('cardModal');
+            cardModalInstance = new bootstrap.Modal(modalElement);
+
+            // 为所有工牌卡片绑定点击事件（事件委托）
+            document.addEventListener('click', function(e) {
+                const card = e.target.closest('.card');
+                // 排除弹窗内的card元素，避免重复触发
+                if (card && !card.closest('.modal')) {
+                    // 从data属性获取工牌信息
+                    const nickname = card.dataset.nickname;
+                    const position = card.dataset.position;
+                    const id = card.dataset.id;
+                    const skill = card.dataset.skill;
+                    const imgUrl = card.dataset.img;
+                    
+                    // 打开弹窗
+                    openCardModal(nickname, position, id, skill, imgUrl);
+                }
+            });
+        });
+
+        // 切换标签页
+        function switchTab(tabId) {
+            if (cardModalInstance) {
+                cardModalInstance.hide();
+            }
+            
+            document.getElementById('hero-main').style.display = 'flex';
+            document.getElementById('loading-area').style.display = 'none';
+
+            const allTabs = document.querySelectorAll('.tab-content');
+            allTabs.forEach(tab => {
+                tab.classList.remove('active');
+                setTimeout(() => {
+                    if (!tab.classList.contains('active')) {
+                        tab.style.display = 'none';
+                    }
+                }, 400);
+            });
+
+            const allBtns = document.querySelectorAll('.tab-btn');
+            allBtns.forEach(btn => btn.classList.remove('active'));
+            
+            const targetTab = document.getElementById(tabId);
+            targetTab.style.display = 'block';
+            setTimeout(() => {
+                targetTab.classList.add('active');
+            }, 10);
+
+            const activeBtn = document.querySelector(`.tab-btn[onclick="switchTab('${tabId}')"]`);
+            if (activeBtn) {
+                activeBtn.classList.add('active');
+            }
+        }
+
+        // 修复：修正openCardModal参数接收逻辑
+        function openCardModal(nickname, position, id, skill, imgUrl) {
+            // 容错：防止参数顺序错误导致的imgUrl丢失
+            if (arguments.length === 1) {
+                imgUrl = nickname;
+                nickname = '';
+            }
+	    
+	    const cardWrapperId = 'cardWrapper_' + Date.now();
+            document.getElementById('cardModalBody').innerHTML = `
+                <div class="card-wrapper" id="${cardWrapperId}">
+		        <div class="card">
+			        <div class="card-bg" style="background-image: url('${imgUrl}');"></div>
+				<div class="card-reflection"></div>
+   			 </div>
+                </div>
+            `;
+	    initCardInteraction(cardWrapperId);
+            // 显示弹窗
+            cardModalInstance.show();
+        }
+
+        // 修复：3D卡片交互逻辑优化
+	function initCardInteraction(cardId) {
+		const cardWrapper = document.getElementById(cardId);
+		if (!cardWrapper) return; // 容错：防止ID不存在
+		
+		// 初始化变量，避免重复获取
+		let rect = cardWrapper.getBoundingClientRect();
+		let centerX = rect.width / 2;
+		let centerY = rect.height / 2;
+		let lastMoveTime = 0; // 新增节流变量
+
+		// 监听鼠标移动 - 优化性能：节流+减少DOM查询
+		let isMouseOver = false;
+		cardWrapper.addEventListener('mouseenter', () => {
+			isMouseOver = true;
+			rect = cardWrapper.getBoundingClientRect();
+			centerX = rect.width / 2;
+			centerY = rect.height / 2;
+		});
+
+		cardWrapper.addEventListener('mouseleave', () => {
+			isMouseOver = false;
+			cardWrapper.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+		});
+
+		cardWrapper.addEventListener('mousemove', (e) => {
+			if (!isMouseOver) return;
+			
+			const x = e.clientX - rect.left - centerX;
+			const y = e.clientY - rect.top - centerY;
+			const rotateY = (x / centerX) * 15;
+			const rotateX = (-y / centerY) * 15;
+			
+			// 优化：使用requestAnimationFrame减少重绘
+			requestAnimationFrame(() => {
+				cardWrapper.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+			});
+		});
+	}
+
+        // 点击进入百业 - 移除自动跳转逻辑
+        function generateReference() {
+            const heroMain = document.getElementById('hero-main');
+            const loadingArea = document.getElementById('loading-area');
+            const loadingIcon = document.querySelector('.loading-icon');
+            
+            // 重置加载图标状态（先移除stop类）
+            loadingIcon.classList.remove('stop');
+            
+            // 切换显示区域
+            heroMain.style.display = 'none';
+            loadingArea.style.display = 'flex';
+            
+            // 仅停止旋转，移除自动跳转百业简介的代码
+            setTimeout(() => {
+                loadingIcon.classList.add('stop');
+            }, 3000);
+        }
+
+        // 优化：照片滚动控制（修复滚动位置计算+动画恢复逻辑）
+        function scrollPhotos(direction) {
+            const wrapper = document.getElementById('photoScrollWrapper');
+            if (!wrapper) return;
+
+            const photoWidth = 300 + 40; // 照片宽度 + 左右margin
+            const scrollStep = photoWidth * 2; // 每次滚动2张照片
+            
+            // 暂停自动滚动动画
+            wrapper.style.animation = 'none';
+            
+            // 计算新位置（修复边界值）
+            if (direction === 'prev') {
+                scrollPosition += scrollStep;
+                if (scrollPosition > 0) scrollPosition = -(photoWidth * 10);
+            } else {
+                scrollPosition -= scrollStep;
+                if (scrollPosition < -(photoWidth * 10)) scrollPosition = 0;
+            }
+            
+            // 平滑滚动（使用CSS过渡替代硬赋值）
+            wrapper.style.transition = 'transform 0.8s ease-out';
+            wrapper.style.transform = `translateX(${scrollPosition}px)`;
+            
+            // 3秒后恢复自动滚动（重置动画+清除过渡）
+            setTimeout(() => {
+                wrapper.style.transition = 'none';
+                wrapper.style.animation = 'photoScroll 40s linear infinite';
+            }, 800);
+        }
+
+        // 优化：点击弹窗外部关闭（精准判断点击区域）
+        document.getElementById('cardModal').addEventListener('click', function(e) {
+            if (e.target === this || e.target.classList.contains('modal-content')) {
+                cardModalInstance.hide();
+            }
+        });
+    </script>
+    <script> 
+    document.addEventListener('click', function() {
+    	const audio = document.getElementById('bgm');
+	audio.muted = false;
+	audio.play(); // 强制触发播放，兼容所有浏览器
+    });
+    </script>
+        <audio id="bgm" autoplay loop muted>
+            <source src="./music/mus1.MP3" type="audio/mpeg">
+            你的浏览器不支持音频播放，请升级
+        </audio>
+</body>
+</html>
